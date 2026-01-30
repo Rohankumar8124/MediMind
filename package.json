@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.37.1",
+    "ai-commit-cli-vd": "^1.0.3",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.0.0",
     "next": "16.1.6",

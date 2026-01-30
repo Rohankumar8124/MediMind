@@ -76,6 +76,12 @@ export default function Home() {
       });
       const result = await response.json();
       if (result.success) {
+        // Log which system was used in browser console
+        if (result.source === 'gemini') {
+          console.log('%c✅ GEMINI AI - Diagnosis powered by Google Gemini API', 'color: #22c55e; font-weight: bold; font-size: 14px;');
+        } else {
+          console.log('%c⚠️ FALLBACK - Diagnosis powered by rule-based system (No API Key)', 'color: #f59e0b; font-weight: bold; font-size: 14px;');
+        }
         setDiagnosis(result);
         setActiveTab('results');
         showNotification('Analysis Complete', 'Your health insights are ready', 'success');

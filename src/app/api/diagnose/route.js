@@ -8,8 +8,11 @@ export async function POST(request) {
 
         if (!apiKey) {
             // Return accurate mock data based on symptoms
-            return NextResponse.json(generateAccurateResponse(symptoms, additionalInfo));
+            console.log('⚠️ GEMINI API KEY NOT FOUND - Using FALLBACK rule-based system');
+            return NextResponse.json({ ...generateAccurateResponse(symptoms, additionalInfo), source: 'fallback' });
         }
+
+        console.log('✅ GEMINI API KEY FOUND - Using Gemini AI for diagnosis');
 
         const prompt = `You are an AI medical assistant. Analyze the following symptoms carefully and provide an accurate health assessment.
 
@@ -63,7 +66,7 @@ Respond ONLY in this exact JSON format (no markdown, no code blocks):
 }`;
 
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-04-17:generateContent?key=${apiKey}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -75,7 +78,10 @@ Respond ONLY in this exact JSON format (no markdown, no code blocks):
         );
 
         if (!response.ok) {
-            throw new Error('API request failed');
+            const errorData = await response.json().catch(() => ({}));
+            console.error('❌ Gemini API Error Details:', JSON.stringify(errorData, null, 2));
+            console.error('❌ Status:', response.status, response.statusText);
+            throw new Error(`API request failed: ${errorData?.error?.message || response.statusText}`);
         }
 
         const data = await response.json();
@@ -90,6 +96,7 @@ Respond ONLY in this exact JSON format (no markdown, no code blocks):
             const cleanedText = textContent.replace(/```json\n?|\n?```/g, '').trim();
             parsedResponse = JSON.parse(cleanedText);
         } catch {
+            console.log('⚠️ Gemini API response parsing failed - Falling back to rule-based system');
             return NextResponse.json(generateAccurateResponse(symptoms, additionalInfo));
         }
 
@@ -97,11 +104,13 @@ Respond ONLY in this exact JSON format (no markdown, no code blocks):
             success: true,
             data: parsedResponse,
             symptomCount: symptoms.length,
+            source: 'gemini',
             disclaimer: "This is AI-generated health information. Always consult a qualified healthcare provider for proper diagnosis and treatment."
         });
 
     } catch (error) {
-        console.error('API Error:', error);
+        console.error('❌ GEMINI API ERROR:', error.message);
+        console.log('⚠️ Falling back to rule-based system due to API error');
         return NextResponse.json(generateAccurateResponse(
             (await request.json().catch(() => ({}))).symptoms || [],
             ''
