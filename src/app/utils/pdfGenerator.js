@@ -8,6 +8,7 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
     const pageWidth = doc.internal.pageSize.getWidth();
     const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
+    const textWidth = contentWidth - 20; // Text area with proper padding for word wrap
     let y = 20;
 
     // Colors
@@ -77,8 +78,17 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
     const urgencyBg = urgencyLevel === 'low' ? pistachioLight :
         urgencyLevel === 'medium' ? [254, 243, 226] : [254, 230, 230];
 
+    // Calculate box height based on content
+    let assessmentBoxHeight = 20;
+    let assessmentLines = [];
+    if (data.overallAssessment) {
+        doc.setFontSize(9);
+        assessmentLines = doc.splitTextToSize(data.overallAssessment, textWidth);
+        assessmentBoxHeight = 20 + (assessmentLines.length * 4) + 8;
+    }
+
     doc.setFillColor(...urgencyBg);
-    doc.roundedRect(margin, y - 5, contentWidth, 35, 3, 3, 'F');
+    doc.roundedRect(margin, y - 5, contentWidth, assessmentBoxHeight, 3, 3, 'F');
 
     doc.setFontSize(11);
     doc.setTextColor(...mediumGray);
@@ -93,11 +103,10 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
         doc.setFontSize(9);
         doc.setTextColor(...mediumGray);
         doc.setFont('helvetica', 'normal');
-        const assessmentLines = doc.splitTextToSize(data.overallAssessment, contentWidth - 16);
         doc.text(assessmentLines, margin + 8, y + 18);
     }
 
-    y += 45;
+    y += assessmentBoxHeight + 10;
 
     // ========== POSSIBLE CONDITIONS ==========
     if (data.possibleConditions?.length > 0) {
@@ -113,31 +122,36 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
         y += 12;
 
         data.possibleConditions.forEach((cond, i) => {
-            checkPage(25);
+            checkPage(35);
 
+            // Condition name with wrapping
             doc.setFontSize(11);
             doc.setTextColor(...darkGray);
             doc.setFont('helvetica', 'bold');
-            doc.text(`${i + 1}. ${cond.name}`, margin + 4, y);
+            const condName = `${i + 1}. ${cond.name}`;
+            const nameLines = doc.splitTextToSize(condName, textWidth);
+            doc.text(nameLines, margin + 4, y);
+            y += nameLines.length * 5;
 
+            // Probability on new line
             if (cond.probability) {
-                const probWidth = doc.getTextWidth(`${i + 1}. ${cond.name}`);
                 doc.setFontSize(9);
                 doc.setTextColor(...mediumGray);
                 doc.setFont('helvetica', 'italic');
-                doc.text(`(${cond.probability} probability)`, margin + 8 + probWidth, y);
+                doc.text(`(${cond.probability} probability)`, margin + 8, y);
+                y += 5;
             }
 
-            y += 6;
-
+            // Description
             if (cond.description) {
                 doc.setFontSize(9);
                 doc.setTextColor(...mediumGray);
                 doc.setFont('helvetica', 'normal');
-                const descLines = doc.splitTextToSize(cond.description, contentWidth - 12);
+                const descLines = doc.splitTextToSize(cond.description, textWidth);
                 doc.text(descLines, margin + 8, y);
-                y += descLines.length * 4 + 6;
+                y += descLines.length * 4 + 4;
             }
+            y += 4;
         });
         y += 5;
     }
@@ -156,12 +170,22 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
         y += 12;
 
         data.suggestedMedicines.forEach((med) => {
-            checkPage(40);
+            // Calculate box height based on warnings
+            let warnLines = [];
+            let boxHeight = 28;
+            if (med.warnings) {
+                doc.setFontSize(8);
+                const warnText = `⚠ ${med.warnings}`;
+                warnLines = doc.splitTextToSize(warnText, textWidth);
+                boxHeight = 28 + (warnLines.length * 4) + 4;
+            }
 
-            // Medicine box
+            checkPage(boxHeight + 10);
+
+            // Medicine box with dynamic height
             doc.setFillColor(252, 252, 252);
             doc.setDrawColor(230, 230, 230);
-            doc.roundedRect(margin, y - 4, contentWidth, 32, 2, 2, 'FD');
+            doc.roundedRect(margin, y - 4, contentWidth, boxHeight, 2, 2, 'FD');
 
             // Medicine name
             doc.setFontSize(11);
@@ -175,29 +199,26 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
             doc.text(med.type || 'OTC', pageWidth - margin - 20, y + 4);
 
             // Details row 1
-            y += 10;
+            let textY = y + 10;
             doc.setFontSize(9);
             doc.setTextColor(...mediumGray);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Dosage: ${med.dosage}`, margin + 6, y + 3);
-            doc.text(`Frequency: ${med.frequency}`, margin + 80, y + 3);
+            doc.text(`Dosage: ${med.dosage}`, margin + 6, textY + 3);
+            doc.text(`Frequency: ${med.frequency}`, margin + 80, textY + 3);
 
             // Details row 2
-            y += 6;
-            doc.text(`Duration: ${med.duration}`, margin + 6, y + 3);
+            textY += 6;
+            doc.text(`Duration: ${med.duration}`, margin + 6, textY + 3);
 
             // Warning
             if (med.warnings) {
-                y += 6;
+                textY += 6;
                 doc.setTextColor(180, 100, 70);
                 doc.setFontSize(8);
-                const warnText = `⚠ ${med.warnings}`;
-                const warnLines = doc.splitTextToSize(warnText, contentWidth - 16);
-                doc.text(warnLines, margin + 6, y + 3);
-                y += warnLines.length * 3;
+                doc.text(warnLines, margin + 6, textY + 3);
             }
 
-            y += 14;
+            y += boxHeight + 6;
         });
         y += 5;
     }
@@ -227,7 +248,7 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
             doc.setFontSize(9);
             doc.setTextColor(...mediumGray);
             doc.setFont('helvetica', 'normal');
-            const instrLines = doc.splitTextToSize(rem.instructions, contentWidth - 16);
+            const instrLines = doc.splitTextToSize(rem.instructions, textWidth);
             doc.text(instrLines, margin + 10, y);
             y += instrLines.length * 4 + 6;
         });
@@ -248,36 +269,40 @@ export async function generatePrescriptionPDF(diagnosis, patientName = 'Patient'
         y += 12;
 
         data.lifestyle.slice(0, 5).forEach((item, i) => {
-            checkPage(10);
+            checkPage(15);
 
             doc.setFontSize(9);
             doc.setTextColor(...darkGray);
             doc.setFont('helvetica', 'normal');
-            doc.text(`${i + 1}. ${item}`, margin + 6, y);
-            y += 6;
+            const itemLines = doc.splitTextToSize(`${i + 1}. ${item}`, textWidth);
+            doc.text(itemLines, margin + 6, y);
+            y += itemLines.length * 4 + 2;
         });
         y += 5;
     }
 
     // ========== WHEN TO SEE DOCTOR ==========
     if (data.whenToSeeDoctor) {
-        checkPage(35);
+        // Calculate box height based on content
+        doc.setFontSize(9);
+        const doctorLines = doc.splitTextToSize(data.whenToSeeDoctor, textWidth);
+        const doctorBoxHeight = 16 + (doctorLines.length * 4) + 8;
+
+        checkPage(doctorBoxHeight + 10);
 
         doc.setFillColor(254, 243, 226);
-        doc.roundedRect(margin, y - 4, contentWidth, 25, 2, 2, 'F');
+        doc.roundedRect(margin, y - 4, contentWidth, doctorBoxHeight, 2, 2, 'F');
 
         doc.setFontSize(10);
         doc.setTextColor(180, 130, 70);
         doc.setFont('helvetica', 'bold');
         doc.text('⚠ WHEN TO SEEK MEDICAL ATTENTION', margin + 6, y + 4);
 
-        y += 8;
         doc.setFontSize(9);
         doc.setTextColor(100, 80, 60);
         doc.setFont('helvetica', 'normal');
-        const doctorLines = doc.splitTextToSize(data.whenToSeeDoctor, contentWidth - 16);
-        doc.text(doctorLines, margin + 6, y + 4);
-        y += 25;
+        doc.text(doctorLines, margin + 6, y + 14);
+        y += doctorBoxHeight + 5;
     }
 
     // ========== FOOTER ==========
