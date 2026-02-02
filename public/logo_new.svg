@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="pistachioGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#93c572;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7ab356;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Heart Shape constructed from Circuit Lines -->
+  <path d="M100 180 C50 135 20 100 20 65 A35 35 0 0 1 90 65 L90 90" stroke="url(#pistachioGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M100 180 C150 135 180 100 180 65 A35 35 0 0 1 110 65 L110 90" stroke="url(#pistachioGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+
+  <!-- Internal Circuit Connections -->
+  <path d="M90 90 L60 90" stroke="url(#pistachioGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="60" cy="90" r="7" fill="url(#pistachioGrad)" />
+
+  <path d="M110 90 L140 90" stroke="url(#pistachioGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="140" cy="90" r="7" fill="url(#pistachioGrad)" />
+  
+  <path d="M100 145 L100 110" stroke="url(#pistachioGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="100" cy="110" r="7" fill="url(#pistachioGrad)" />
+
+  <!-- "Spark" / Idea Symbol at Top -->
+  <path d="M100 30 L100 15" stroke="url(#pistachioGrad)" stroke-width="6" stroke-linecap="round" />
+  <path d="M80 35 L70 20" stroke="url(#pistachioGrad)" stroke-width="6" stroke-linecap="round" />
+  <path d="M120 35 L130 20" stroke="url(#pistachioGrad)" stroke-width="6" stroke-linecap="round" />
+</svg>

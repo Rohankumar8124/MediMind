@@ -25,23 +25,19 @@ async function saveReportToDatabase(symptoms, additionalInfo, diagnosis) {
             return;
         }
 
-        // Save to MediCare_Admin collection with email-based matching
-        const mongoose = await import('mongoose');
-        const collection = mongoose.connection.db.collection('MediCare_Admin');
-
-        const reportDoc = {
-            type: 'diagnosis_report',
-            userEmail,
+        // Save using the Mongoose Report model
+        const newReport = new Report({
+            userId,
             userName,
             symptoms,
             additionalInfo: additionalInfo || '',
             diagnosis,
             urgencyLevel: diagnosis.urgencyLevel || 'low',
             createdAt: new Date()
-        };
+        });
 
-        await collection.insertOne(reportDoc);
-        console.log('✅ Report saved to MediCare_Admin collection');
+        await newReport.save();
+        console.log('✅ Report saved to reports collection via Model');
     } catch (error) {
         console.error('❌ Error saving report:', error.message);
         // Don't throw - we don't want to fail the request if DB save fails

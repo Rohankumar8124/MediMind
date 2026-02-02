@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable dark mode with class/selector strategy for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   /* Minimalist Color Palette - Faded White, Grey, Pistachio */
   --bg-primary: #f8f9fa;
@@ -64,6 +67,141 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
   --shadow-glow: 0 0 40px rgba(147, 197, 114, 0.25);
+}
+
+/* Dark mode component overrides */
+.dark .card {
+  background: var(--bg-secondary);
+  border-color: var(--grey-200);
+}
+
+.dark .input-field {
+  background: var(--bg-tertiary);
+  border-color: var(--grey-200);
+  color: var(--text-primary);
+}
+
+.dark .input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.dark .tab-nav {
+  background: var(--bg-secondary);
+  border-color: var(--grey-200);
+}
+
+.dark .tab-item {
+  color: var(--text-tertiary);
+}
+
+.dark .tab-item:hover {
+  color: var(--text-primary);
+  background: var(--grey-100);
+}
+
+.dark .category-pill {
+  background: var(--bg-secondary);
+  border-color: var(--grey-200);
+  color: var(--text-secondary);
+}
+
+.dark .category-pill:hover {
+  border-color: var(--grey-300);
+  color: var(--text-primary);
+}
+
+.dark .symptom-checkbox {
+  background: var(--bg-secondary);
+  border-color: var(--grey-200);
+}
+
+.dark .symptom-checkbox:hover {
+  background: var(--pistachio-pale);
+  border-color: var(--pistachio-light);
+}
+
+.dark .symptom-checkbox.selected {
+  background: var(--pistachio-pale);
+}
+
+.dark .medicine-card {
+  background: var(--bg-secondary);
+  border-color: var(--grey-200);
+}
+
+.dark .schedule-item {
+  background: var(--bg-secondary);
+  border-color: var(--grey-200);
+}
+
+.dark .notification-toast {
+  background: var(--bg-secondary);
+  border-color: var(--grey-200);
+}
+
+.dark .time-picker {
+  background: var(--bg-tertiary);
+  border-color: var(--grey-200);
+  color: var(--text-primary);
+}
+
+.dark .btn-secondary {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border-color: var(--grey-200);
+}
+
+.dark .btn-secondary:hover {
+  background: var(--grey-200);
+  border-color: var(--grey-300);
+}
+
+.dark .btn-ghost {
+  color: var(--text-secondary);
+}
+
+.dark .btn-ghost:hover {
+  background: var(--grey-100);
+}
+
+.dark .toggle {
+  background: var(--grey-200);
+}
+
+.dark .progress-bar {
+  background: var(--grey-200);
+}
+
+.dark .divider {
+  background: var(--grey-200);
+}
+
+.dark .badge-neutral {
+  background: var(--grey-100);
+  color: var(--grey-600);
+}
+
+.dark .icon-box-grey {
+  background: var(--grey-100);
+  color: var(--grey-500);
+}
+
+.dark .number-highlight {
+  background: var(--pistachio-pale);
+  color: var(--pistachio-light);
+}
+
+.dark .empty-state-icon {
+  background: var(--pistachio-pale);
+}
+
+/* Dark mode scrollbar */
+.dark::-webkit-scrollbar-thumb {
+  background: var(--grey-300);
+}
+
+.dark::-webkit-scrollbar-thumb:hover {
+  background: var(--grey-400);
 }
 
 @theme inline {
@@ -361,23 +499,6 @@ body {
   padding: 24px;
   transition: all 0.3s ease;
   position: relative;
-}
-
-.medicine-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--pistachio), var(--pistachio-light));
-  border-radius: 16px 16px 0 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.medicine-card:hover::before {
-  opacity: 1;
 }
 
 .medicine-card:hover {

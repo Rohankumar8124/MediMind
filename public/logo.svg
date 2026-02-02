@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#93c572;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7ab356;stop-opacity:1" />
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Circuit Heart Construction -->
+  <g stroke="url(#mainGrad)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Left Lobe / Circuit Trace -->
+    <path d="M100 175 
+             C60 135 20 95 20 60 
+             A35 35 0 0 1 90 60 
+             L90 100" />
+             
+    <!-- Right Lobe / Circuit Trace -->
+    <path d="M100 175 
+             C140 135 180 95 180 60 
+             A35 35 0 0 1 110 60 
+             L110 80" />
+             
+    <!-- Internal Tech Nodes -->
+    <path d="M90 100 L60 100" />
+    <path d="M110 80 L140 80" />
+    <path d="M100 140 L100 110" />
+  </g>
+
+  <!-- Nodes/Dots -->
+  <circle cx="60" cy="100" r="10" fill="url(#mainGrad)"/>
+  <circle cx="140" cy="80" r="10" fill="url(#mainGrad)"/>
+  <circle cx="100" cy="110" r="10" fill="url(#mainGrad)"/>
+  
+  <!-- "Spark" at the top center -->
+  <path d="M100 35 L100 15" stroke="url(#mainGrad)" stroke-width="6" stroke-linecap="round" />
+  <path d="M80 40 L70 25" stroke="url(#mainGrad)" stroke-width="6" stroke-linecap="round" />
+  <path d="M120 40 L130 25" stroke="url(#mainGrad)" stroke-width="6" stroke-linecap="round" />
+
+</svg>

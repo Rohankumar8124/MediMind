@@ -136,13 +136,13 @@ export default function MedicineSchedule({
                             return (
                                 <div key={`${item.id}-${item.time}-${i}`} className="relative flex items-center gap-4">
                                     <div className={`timeline-dot ${past ? 'timeline-dot-past' : ''} ${current ? 'pulse-soft' : ''} ${!past && !current ? 'timeline-dot-inactive' : ''}`} />
-                                    <div className={`flex-1 p-4 rounded-xl ${current ? 'bg-[#eef5e9] border border-[#d4e8c7]' : 'bg-gray-50 border border-gray-100'}`}>
+                                    <div className={`flex-1 p-4 rounded-xl ${current ? 'bg-[#eef5e9] dark:bg-[#1a2e1a] border border-[#d4e8c7] dark:border-[#2d4a2d]' : 'bg-gray-50 dark:bg-gray-800 border border-gray-100 dark:border-gray-700'}`}>
                                         <div className="flex items-center justify-between">
                                             <div>
                                                 <p className={`font-medium ${past ? 'text-gray-400 line-through' : 'text-gray-800 dark:text-white'}`}>{item.medicine}</p>
                                                 <p className="text-sm text-gray-500 dark:text-gray-400">{item.dosage}</p>
                                             </div>
-                                            <div className={`font-mono ${current ? 'text-[#7ab356]' : past ? 'text-gray-400' : 'text-gray-600'}`}>{formatTime(item.time)}</div>
+                                            <div className={`font-mono ${current ? 'text-[#7ab356]' : past ? 'text-gray-400' : 'text-gray-600 dark:text-gray-300'}`}>{formatTime(item.time)}</div>
                                         </div>
                                     </div>
                                 </div>

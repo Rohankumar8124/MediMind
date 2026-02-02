@@ -84,8 +84,8 @@ export default function DocumentUpload({ documents, setDocuments }) {
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
                 className={`border-2 border-dashed rounded-xl p-6 text-center cursor-pointer transition-all ${isDragging
-                        ? 'border-[#93c572] bg-[#eef5e9]'
-                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-[#93c572] bg-[#eef5e9] dark:bg-[#1a2e1a]'
+                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800'
                     }`}
             >
                 <input
@@ -98,14 +98,14 @@ export default function DocumentUpload({ documents, setDocuments }) {
                 />
 
                 <div className="flex flex-col items-center gap-2">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${isDragging ? 'bg-[#93c572] text-white' : 'bg-gray-100 text-gray-400'
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center transition-colors ${isDragging ? 'bg-[#93c572] text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-400'
                         }`}>
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
                     </div>
                     <div>
-                        <p className="text-sm font-medium text-gray-700">
+                        <p className="text-sm font-medium text-gray-700 dark:text-gray-200">
                             {isDragging ? 'Drop files here' : 'Upload medical documents'}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">
@@ -118,14 +118,14 @@ export default function DocumentUpload({ documents, setDocuments }) {
             {/* Uploaded Documents */}
             {documents.length > 0 && (
                 <div className="space-y-2">
-                    <p className="text-sm font-medium text-gray-600">
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-300">
                         Uploaded Documents ({documents.length})
                     </p>
                     <div className="space-y-2">
                         {documents.map((doc) => (
                             <div
                                 key={doc.id}
-                                className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100"
+                                className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700"
                             >
                                 {doc.preview ? (
                                     <img
@@ -134,13 +134,13 @@ export default function DocumentUpload({ documents, setDocuments }) {
                                         className="w-10 h-10 rounded-lg object-cover"
                                     />
                                 ) : (
-                                    <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center">
+                                    <div className="w-10 h-10 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 flex items-center justify-center">
                                         {getFileIcon(doc.type)}
                                     </div>
                                 )}
 
                                 <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-700 truncate">{doc.name}</p>
+                                    <p className="text-sm font-medium text-gray-700 dark:text-gray-200 truncate">{doc.name}</p>
                                     <p className="text-xs text-gray-400">{formatSize(doc.size)}</p>
                                 </div>
 

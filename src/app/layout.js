@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "MediCare AI - Your Intelligent Health Assistant",
+  title: "Healmate AI - Your Intelligent Health Assistant",
   description: "AI-powered health assistant that helps you track symptoms, get medicine suggestions, and manage your health schedule with smart notifications.",
   keywords: "AI doctor, health assistant, symptom checker, medicine reminder, health AI",
 };

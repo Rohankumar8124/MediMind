@@ -33,17 +33,12 @@ export async function GET() {
             });
         }
 
-        // Fetch diagnosis reports from MediCare_Admin collection matching user email
-        const mongoose = await import('mongoose');
-        const collection = mongoose.connection.db.collection('MediCare_Admin');
-        const diagnosisReports = await collection
-            .find({
-                type: 'diagnosis_report',
-                userEmail: userEmail
-            })
+        // Fetch diagnosis reports using Mongoose model
+        // Match by userId (Clerk ID) which is more reliable than email
+        const diagnosisReports = await Report.find({ userId })
             .sort({ createdAt: -1 })
             .limit(50)
-            .toArray();
+            .lean(); // Convert to plain JS objects
 
         return NextResponse.json({
             success: true,

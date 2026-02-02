@@ -176,7 +176,7 @@ export default function Home() {
           <SignedIn>
             <header className="text-center mb-10 slide-up">
               <h1 className="text-2xl md:text-3xl font-semibold text-gray-800 dark:text-white mb-2">
-                Medi<span className="gradient-text">Care</span> AI
+                Healmate<span className="gradient-text">AI</span>
               </h1>
               <p className="text-gray-500 dark:text-gray-400">Describe your symptoms and receive personalized health insights</p>
             </header>

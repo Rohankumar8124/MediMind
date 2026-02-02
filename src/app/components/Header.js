@@ -17,7 +17,7 @@ export default function Header() {
                         </svg>
                     </div>
                     <span className="font-semibold text-gray-800 dark:text-white">
-                        Medi<span className="text-[#93c572]">Care</span>
+                        Healmate<span className="text-[#93c572]">AI</span>
                     </span>
                 </div>
 
